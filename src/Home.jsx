@@ -100,26 +100,26 @@ const Home = () => {
                     toggleLoading(true)
                     setTimeout(() => {
                         toggleLoading(false)
+                        setPassword('')
+                        setPasswordError('Invalid Password')
+                        setTimeout(() => {
+                            setPasswordError('')
+                        }, 2500);
+                        setCount(count + 1)
                     }, 2500);
-                    setPassword('')
-                    setPasswordError('Invalid Password')
-                    setTimeout(() => {
-                        setPasswordError('')
-                    }, 2000);
-                    setCount(count + 1)
                 }
                 if (count === 1) {
                     togglePassword2(password)
                     toggleLoading(true)
                     setTimeout(() => {
                         toggleLoading(false)
+                        setPassword('')
+                        setPasswordError('Invalid Password')
+                        setTimeout(() => {
+                            setPasswordError('')
+                        }, 2500);
+                        setCount(count + 1)
                     }, 2500);
-                    setPassword('')
-                    setPasswordError('Invalid Password')
-                    setTimeout(() => {
-                        setPasswordError('')
-                    }, 2000);
-                    setCount(count + 1)
                 }
             }
             else {

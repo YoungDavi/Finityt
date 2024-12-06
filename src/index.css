@@ -10,7 +10,7 @@
 }
 
 .spinner {
-  animation: spin 3s infinite ease-in-out;
+  animation: spin 2.5s infinite ease-in-out;
 }
 
 @keyframes spin {
